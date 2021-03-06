@@ -4,6 +4,11 @@
 #include "MemoryAccess.h"
 #include "AlbumManager.h"
 
+void printSysInfo()
+{
+	time_t now = time(0);
+	std::cout << "My name is Yarden perets, And today is " << ctime(&now) << std::endl;
+}
 
 int getCommandNumberFromUser()
 {
@@ -31,7 +36,6 @@ int getCommandNumberFromUser()
 
 int main(void)
 {
-	time_t now = time(0);
 	// initialization data access
 	MemoryAccess dataAccess;
 
@@ -41,7 +45,7 @@ int main(void)
 
 	std::string albumName;
 	std::cout << "Welcome to Gallery!" << std::endl;
-	std::cout << "My name is Yarden perets, And today is " << ctime(&now) << std::endl;
+	printSysInfo();
 	std::cout << "===================" << std::endl;
 	std::cout << "Type " << HELP << " to a list of all supported commands" << std::endl;
 	
