@@ -1,8 +1,14 @@
 #include <iostream>
 #include <string>
+#include <ctime>
 #include "MemoryAccess.h"
 #include "AlbumManager.h"
 
+void printSysInfo()
+{
+	time_t now = time(0);
+	std::cout << "My name is Yarden perets, And today is " << ctime(&now) << std::endl;
+}
 
 int getCommandNumberFromUser()
 {
@@ -39,6 +45,7 @@ int main(void)
 
 	std::string albumName;
 	std::cout << "Welcome to Gallery!" << std::endl;
+	printSysInfo();
 	std::cout << "===================" << std::endl;
 	std::cout << "Type " << HELP << " to a list of all supported commands" << std::endl;
 	
