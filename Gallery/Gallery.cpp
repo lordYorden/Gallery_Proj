@@ -3,6 +3,7 @@
 #include <ctime>
 #include "MemoryAccess.h"
 #include "AlbumManager.h"
+#include "DatabaseAccess.h"
 
 void printSysInfo()
 {
