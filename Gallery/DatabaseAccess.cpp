@@ -2,6 +2,16 @@
 #define SQL_DB_NAME "galleryDB.sqlite"
 
 /*
+* the function closes the album and released it's allocated memory
+* input: pAlbum - a pointer to the album to delete deleted (Album&)
+* output: none
+*/
+void DatabaseAccess::closeAlbum(Album& pAlbum)
+{
+	this->_albums.remove(pAlbum);
+}
+
+/*
 * the functiion opens the DB of the gallery
 * if the table of the BD arn't there creates them
 * input: none
@@ -11,10 +21,10 @@ bool DatabaseAccess::open()
 {
 	std::string dbFileName = SQL_DB_NAME;
 	int doesFileExist = _access(dbFileName.c_str(), 0);
-	int res = sqlite3_open(dbFileName.c_str(), &db);
+	int res = sqlite3_open(dbFileName.c_str(), &_db);
 	if (res != SQLITE_OK)
 	{
-		db = nullptr;
+		_db = nullptr;
 		std::cout << "Failed to open DB" << std::endl;
 		return false;
 	}
@@ -68,8 +78,8 @@ bool DatabaseAccess::open()
 */
 void DatabaseAccess::close()
 {
-	sqlite3_close(db);
-	db = nullptr;
+	sqlite3_close(_db);
+	_db = nullptr;
 }
 
 /*
@@ -92,8 +102,8 @@ void DatabaseAccess::clear()
 	sqlStatement = "VACUUM";
 	sqlExec(sqlStatement, errMessage);
 
-	this->m_albums.clear();
-	this->m_users.clear();
+	this->_albums.clear();
+	this->_users.clear();
 }
 
 /*
@@ -104,7 +114,7 @@ void DatabaseAccess::clear()
 void DatabaseAccess::sqlExec(std::string& sqlStatement, char* errMessage)
 {
 	//std::cout << sqlStatement << std::endl;
-	bool res = sqlite3_exec(db, sqlStatement.c_str(), nullptr, nullptr, &errMessage);
+	bool res = sqlite3_exec(_db, sqlStatement.c_str(), nullptr, nullptr, &errMessage);
 	if (res != SQLITE_OK)
 	{
 		std::cout << "Failed to execut the sql statement" << std::endl;

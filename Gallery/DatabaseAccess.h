@@ -20,7 +20,7 @@ public:
 	//void deleteAlbum(const std::string& albumName, int userId) override;
 	//bool doesAlbumExists(const std::string& albumName, int userId) override;
 	//Album openAlbum(const std::string& albumName) override;
-	//void closeAlbum(Album& pAlbum) override;
+	void closeAlbum(Album& pAlbum) override;
 	//void printAlbums() override;
 
 	//// picture related
@@ -52,9 +52,9 @@ public:
 	void clear() override;
 
 private:
-	std::list<Album> m_albums;
-	std::list<User> m_users;
-	sqlite3* db;
+	std::list<Album> _albums;
+	std::list<User> _users;
+	sqlite3* _db;
 
 	void sqlExec(std::string& sqlStatement, char* errMessage);
 	//bool getAlbumIfExists(const std::string& albumName);
