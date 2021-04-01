@@ -108,9 +108,6 @@
     <ClCompile Include="User.cpp" />
     <ClCompile Include="Gallery.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Gallery.VC.db" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

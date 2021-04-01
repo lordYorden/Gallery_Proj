@@ -43,8 +43,6 @@ int main(void)
 	// initialize album manager
 	AlbumManager albumManager(dataAccess);
 
-
-	std::string albumName;
 	std::cout << "Welcome to Gallery!" << std::endl;
 	printSysInfo();
 	std::cout << "===================" << std::endl;
