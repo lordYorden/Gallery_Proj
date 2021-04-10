@@ -197,14 +197,6 @@ void AlbumManager::listPicturesInAlbum()
 	std::cout << std::endl;
 }
 
-BOOL WINAPI consoleHandler(DWORD signal) {
-
-	if (signal == CTRL_C_EVENT)
-		printf("Ctrl-C handled\n");
-
-	return TRUE;
-}
-
 void AlbumManager::showPicture()
 {
 	refreshOpenAlbum();
