@@ -183,6 +183,33 @@ void MemoryAccess::deleteUser(const User& user)
 {
 	if (doesUserExists(user.getId())) {
 	
+		for (const auto& album : m_albums) {
+	
+			for (const auto& picture : album.getPictures()) {
+				if (picture.isUserTagged(user)) {
+					untagUserInPicture(album.getName(), picture.getName(), user.getId());
+				}
+			}
+		}
+
+		//sorry for this but its finaly working so i don't touch it
+		for (std::list<Album>::iterator album = m_albums.begin(); album != m_albums.end();)
+		{
+
+			if (album->getOwnerId() == user.getId())
+			{
+				Album temp = *album;
+				album++;
+				m_albums.remove(temp);
+				
+			}
+			else
+			{
+				album++;
+			}
+
+		}
+
 		for (auto iter = m_users.begin(); iter != m_users.end(); ++iter) {
 			if (*iter == user) {
 				iter = m_users.erase(iter);

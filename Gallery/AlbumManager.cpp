@@ -3,6 +3,14 @@
 #include "Constants.h"
 #include "MyException.h"
 #include "AlbumNotOpenException.h"
+#define DONT_WAIT 0
+#define OK 0
+#define VK_CKEY 0x43
+#define IS_PRESSED 0x8000
+#define MSPAINT_PATH "C:/Windows/System32/mspaint.exe"	
+#define IRFANV_PATH "C:/Program Files/IrfanView/i_view64.exe"
+#define MSPAINT 1
+#define IRFANV 2
 
 
 AlbumManager::AlbumManager(IDataAccess& dataAccess) :
@@ -203,10 +211,53 @@ void AlbumManager::showPicture()
 		throw MyException("Error: Can't open <" + picName+ "> since it doesnt exist on disk.\n");
 	}
 
-	// Bad practice!!!
-	// Can lead to privileges escalation
-	// You will replace it on WinApi Lab(bonus)
-	system(pic.getPath().c_str()); 
+	//open the softwer choosen by the user aknd listen fro ctrl + c input
+	STARTUPINFO info = { sizeof(info) };
+	PROCESS_INFORMATION processInfo;
+
+	std::string picPathStr = " " + pic.getPath();
+	PSTR picPath = (PSTR)(picPathStr.c_str());
+	std::cout << picPath << std::endl;
+
+	std::string programStr = "";
+	int menu = 0;
+	do
+	{
+		std::cout << "Pick program (1 - mspaint, 2 - irfan view)" << std::endl;
+		std::cin >> menu;
+		switch (menu)
+		{
+		case MSPAINT:
+			programStr = MSPAINT_PATH;
+			break;
+		case IRFANV:
+			programStr = IRFANV_PATH;
+			break;
+		default:
+			std::cout << "Not an option! Pls try again.." << std::endl;
+			break;
+		}
+	} while (menu != MSPAINT && menu != IRFANV);
+
+	if (!CreateProcess(programStr.c_str(), picPath, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+	{
+		std::cout << GetLastError() << std::endl;
+	}
+	else
+	{
+		HANDLE process = processInfo.hProcess;
+		bool isPressed = false;
+		while (!isPressed && WaitForSingleObject(process, DONT_WAIT))
+		{
+			SetConsoleCtrlHandler(NULL, TRUE);
+			if ((GetKeyState(VK_CONTROL) & IS_PRESSED) && (GetKeyState(VK_CKEY) & IS_PRESSED))
+			{
+				//std::cout << "ctrl c pressed" << std::endl;
+				isPressed = true;
+				TerminateProcess(process, OK);
+			}
+		}
+	}
 }
 
 void AlbumManager::tagUserInPicture()
@@ -331,7 +382,8 @@ void AlbumManager::userStatistics()
 	std::cout << "user @" << userId << " Statistics:" << std::endl << "--------------------" << std::endl <<
 		"  + Count of Albums Tagged: " << m_dataAccess.countAlbumsTaggedOfUser(user) << std::endl <<
 		"  + Count of Tags: " << m_dataAccess.countTagsOfUser(user) << std::endl <<
-		"  + Avarage Tags per Alboum: " << m_dataAccess.averageTagsPerAlbumOfUser(user) << std::endl;
+		"  + Avarage Tags per Alboum: " << m_dataAccess.averageTagsPerAlbumOfUser(user) << std::endl <<
+		"  + Number of albums that user have: " << m_dataAccess.countAlbumsOwnedOfUser(user) << std::endl;
 }
 
 
