@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include "MemoryAccess.h"
 #include "AlbumManager.h"
+#include "DatabaseAccess.h"
 
 void printSysInfo()
 {
@@ -37,13 +37,12 @@ int getCommandNumberFromUser()
 int main(void)
 {
 	// initialization data access
-	MemoryAccess dataAccess;
+	DatabaseAccess dataAccess;
 
 	// initialize album manager
 	AlbumManager albumManager(dataAccess);
 
 
-	std::string albumName;
 	std::cout << "Welcome to Gallery!" << std::endl;
 	printSysInfo();
 	std::cout << "===================" << std::endl;
